@@ -1,0 +1,59 @@
+# ==============================================================================
+# Meta Package: hdpitkinter (compatibility shim for tkinter-unblur)
+# ==============================================================================
+# This is a separate pyproject.toml for publishing hdpitkinter as a meta-package.
+#
+# To build and publish:
+#   cd meta/
+#   python -m build
+#   twine upload dist/*
+# ==============================================================================
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hdpitkinter"
+version = "2.0.0"
+description = "Meta-package: hdpitkinter has been renamed to tkinter-unblur"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "unlibra"},
+]
+keywords = [
+    "tkinter",
+    "dpi",
+    "hdpi",
+    "deprecated",
+    "renamed",
+]
+classifiers = [
+    "Development Status :: 7 - Inactive",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "tkinter-unblur>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/unlibra/tkinter-unblur"
+"Migrated to" = "https://pypi.org/project/tkinter-unblur/"
+Repository = "https://github.com/unlibra/tkinter-unblur"
+
+[tool.setuptools]
+py-modules = ["hdpitkinter"]
+
+[tool.setuptools.packages]
+find = {}

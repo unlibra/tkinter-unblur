@@ -1,35 +1,153 @@
-<!-- ![](./res/) -->
+# tkinter-unblur
 
-# High-DPI-Tkinter
+[![PyPI version](https://badge.fury.io/py/tkinter-unblur.svg)](https://badge.fury.io/py/tkinter-unblur)
+[![Python versions](https://img.shields.io/pypi/pyversions/tkinter-unblur.svg)](https://pypi.org/project/tkinter-unblur/)
+[![License](https://img.shields.io/github/license/unlibra/tkinter-unblur.svg)](https://github.com/unlibra/tkinter-unblur/blob/master/LICENSE)
+[![CI](https://github.com/unlibra/tkinter-unblur/actions/workflows/ci.yml/badge.svg)](https://github.com/unlibra/tkinter-unblur/actions)
 
-Sharpen blurry Tkinter scaling on Windows 10 high DPI displays
+**Fix blurry Tkinter applications on Windows 10/11 high-DPI displays.**
+
+## The Problem
+
+Tkinter applications look blurry and pixelated on modern high-resolution displays with scaling enabled (125%, 150%, 200%, etc.). This is because Tkinter is not DPI-aware by default on Windows.
+
+## The Solution
+
+```python
+# Before (blurry)
+from tkinter import Tk
+
+# After (crystal clear)
+from tkinter_unblur import Tk
+```
+
+That's it. One import change, and your Tkinter app renders crisply.
 
 ## Installation
 
-Install using pip
-
-```sh
-pip install hdpitkinter
+```bash
+pip install tkinter-unblur
 ```
 
 ## Usage
 
-Replace tkinter.Tk() to hdpitkinter.HdpiTk()
+### Basic Usage
 
 ```python
-# from tkinter import Tk
-from hdpitkinter import HdpiTk
+from tkinter_unblur import Tk
 
-# root = Tk()
-root = HdpiTk()
-# After that use like Tk instance
+root = Tk()
+root.title("My App")
+root.geometry("800x600")
 root.mainloop()
 ```
 
+### Access DPI Information
+
+```python
+from tkinter_unblur import Tk
+
+root = Tk()
+print(f"DPI: {root.dpi_x}x{root.dpi_y}")
+print(f"Scaling: {root.dpi_scaling:.0%}")  # e.g., "Scaling: 150%"
+```
+
+### Scale Values Manually
+
+```python
+from tkinter_unblur import Tk
+
+root = Tk()
+
+# Scale a single value
+button_width = root.scale_value(100)  # Returns 150 at 150% scaling
+
+# Scale a geometry string
+scaled_geometry = root.scale_geometry("800x600+100+50")  # "1200x900+150+75"
+```
+
+## Compatibility
+
+| Platform | Status |
+|----------|--------|
+| Windows 10/11 | Full DPI awareness support |
+| Linux | Passthrough (OS handles DPI) |
+| macOS | Passthrough (OS handles DPI) |
+
+| Python Version | Status |
+|----------------|--------|
+| 3.9+ | Supported |
+| 3.8 | Not supported (EOL) |
+
+## How It Works
+
+On Windows, this library:
+
+1. Calls `SetProcessDpiAwareness(1)` to enable system DPI awareness
+2. Queries the monitor's DPI using `GetDpiForMonitor`
+3. Provides scaling utilities for your application
+
+On non-Windows platforms, the library is a simple passthrough to `tkinter.Tk`.
+
+## Migrating from hdpitkinter
+
+This package was formerly known as `hdpitkinter`. To migrate:
+
+```bash
+pip uninstall hdpitkinter
+pip install tkinter-unblur
+```
+
+```python
+# Old
+from hdpitkinter import HdpiTk
+root = HdpiTk()
+
+# New
+from tkinter_unblur import Tk
+root = Tk()
+```
+
+The `HdpiTk` name is still available as an alias for backwards compatibility:
+
+```python
+from tkinter_unblur import HdpiTk  # Works, but Tk is preferred
+```
+
+## API Reference
+
+### `Tk` Class
+
+A drop-in replacement for `tkinter.Tk` with DPI awareness.
+
+**Attributes:**
+- `dpi_x: int | None` - Horizontal DPI (96 = 100% scaling)
+- `dpi_y: int | None` - Vertical DPI (96 = 100% scaling)
+- `dpi_scaling: float` - Scaling factor (1.0 = 100%, 1.5 = 150%)
+
+**Methods:**
+- `scale_value(value) -> int` - Scale a numeric value by the DPI factor
+- `scale_geometry(geometry) -> str` - Scale a geometry string ("WxH+X+Y")
+
+### Utility Functions
+
+- `get_dpi_info(window_handle) -> tuple[int | None, int | None, float]`
+- `scale_geometry(geometry, scale_func) -> str`
+
+### Exceptions
+
+- `TkinterUnblurError` - Base exception
+- `UnsupportedPlatformError` - Platform doesn't support DPI awareness
+- `DPIDetectionError` - DPI detection failed
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 ## License
 
-MIT License
+MIT License - see [LICENSE](LICENSE) for details.
 
-## Thanks
+## Acknowledgments
 
-<https://stackoverflow.com/questions/41315873/attempting-to-resolve-blurred-tkinter-text-scaling-on-windows-10-high-dpi-disp>
+This project is based on the solution from [this Stack Overflow answer](https://stackoverflow.com/questions/41315873/attempting-to-resolve-blurred-tkinter-text-scaling-on-windows-10-high-dpi-disp).

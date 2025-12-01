@@ -1,0 +1,151 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# ==============================================================================
+# Main Package: tkinter-unblur
+# ==============================================================================
+[project]
+name = "tkinter-unblur"
+version = "1.0.0"
+description = "Fix blurry Tkinter applications on Windows 10/11 high-DPI displays"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "unlibra", email = "your.email@example.com"},
+]
+keywords = [
+    "tkinter",
+    "blurry",
+    "dpi",
+    "hidpi",
+    "high-dpi",
+    "windows",
+    "scaling",
+    "gui",
+    "clear",
+    "sharp",
+    "pixelated",
+    "resolution",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: User Interfaces",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/unlibra/tkinter-unblur"
+Documentation = "https://github.com/unlibra/tkinter-unblur#readme"
+Repository = "https://github.com/unlibra/tkinter-unblur"
+Issues = "https://github.com/unlibra/tkinter-unblur/issues"
+Changelog = "https://github.com/unlibra/tkinter-unblur/releases"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "mypy>=1.0",
+    "ruff>=0.1.0",
+]
+
+# ==============================================================================
+# Package Discovery
+# ==============================================================================
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["tkinter_unblur*", "hdpitkinter*"]
+
+[tool.setuptools.package-data]
+tkinter_unblur = ["py.typed"]
+
+# ==============================================================================
+# Ruff (Linter + Formatter)
+# ==============================================================================
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "A",      # flake8-builtins
+    "C4",     # flake8-comprehensions
+    "T20",    # flake8-print
+    "RUF",    # Ruff-specific rules
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "N803",   # argument name should be lowercase (tkinter.Tk uses camelCase)
+    "E402",   # module level import not at top (needed for deprecation warning)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["tkinter_unblur", "hdpitkinter"]
+
+# ==============================================================================
+# Mypy (Type Checker)
+# ==============================================================================
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+# Windows-specific module - only valid on Windows
+# This module uses ctypes.WinDLL which only exists on Windows
+module = "tkinter_unblur._windows"
+ignore_errors = true
+
+
+# ==============================================================================
+# Pytest
+# ==============================================================================
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+# ==============================================================================
+# Coverage
+# ==============================================================================
+[tool.coverage.run]
+source = ["src/tkinter_unblur"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
