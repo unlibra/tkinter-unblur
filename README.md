@@ -5,6 +5,8 @@
 [![License](https://img.shields.io/github/license/unlibra/tkinter-unblur.svg)](https://github.com/unlibra/tkinter-unblur/blob/master/LICENSE)
 [![CI](https://github.com/unlibra/tkinter-unblur/actions/workflows/ci.yml/badge.svg)](https://github.com/unlibra/tkinter-unblur/actions)
 
+> **Note:** `hdpitkinter` has been reborn as `tkinter-unblur` with modern features. See [migration guide](#migrating-from-hdpitkinter).
+
 **Fix blurry Tkinter applications on Windows 10/11 high-DPI displays.**
 
 ## The Problem
@@ -37,8 +39,6 @@ pip install tkinter-unblur
 
 ## Usage
 
-### Basic Usage
-
 ```python
 from tkinter_unblur import Tk
 
@@ -48,30 +48,7 @@ root.geometry("800x600")
 root.mainloop()
 ```
 
-### Access DPI Information
-
-```python
-from tkinter_unblur import Tk
-
-root = Tk()
-print(f"DPI: {root.dpi_x}x{root.dpi_y}")
-print(f"Scaling: {root.dpi_scaling:.0%}")  # e.g., "Scaling: 150%"
-```
-
-### Scale Values Manually
-
-```python
-from tkinter import Label
-from tkinter_unblur import Tk
-
-root = Tk()
-
-# Scale font sizes to maintain physical size across different DPI settings
-label = Label(root, text="Hello", font=("Arial", root.scale_value(12)))
-
-# Scale window geometry (width x height + x + y)
-root.geometry(root.scale_geometry("800x600+100+50"))
-```
+That's all you need! For advanced usage, see [API Reference](#api-reference).
 
 ## Compatibility
 
@@ -95,6 +72,8 @@ On Windows, this library:
 3. Provides scaling utilities for your application
 
 On non-Windows platforms, the library is a simple passthrough to `tkinter.Tk`.
+
+The implementation is based on [this Stack Overflow answer](https://stackoverflow.com/questions/41315873/attempting-to-resolve-blurred-tkinter-text-scaling-on-windows-10-high-dpi-disp).
 
 ## Migrating from hdpitkinter
 
@@ -127,16 +106,47 @@ from tkinter_unblur import HdpiTk  # Works, but Tk is preferred
 
 A drop-in replacement for `tkinter.Tk` with DPI awareness.
 
-**Attributes:**
+#### Attributes
 
 - `dpi_x: int | None` - Horizontal DPI (96 = 100% scaling)
 - `dpi_y: int | None` - Vertical DPI (96 = 100% scaling)
 - `dpi_scaling: float` - Scaling factor (1.0 = 100%, 1.5 = 150%)
 
-**Methods:**
+**Example:**
 
-- `scale_value(value) -> int` - Scale a numeric value by the DPI factor
-- `scale_geometry(geometry) -> str` - Scale a geometry string ("WxH+X+Y")
+```python
+root = Tk()
+print(f"DPI: {root.dpi_x}x{root.dpi_y}")
+print(f"Scaling: {root.dpi_scaling:.0%}")  # e.g., "Scaling: 150%"
+```
+
+#### Methods
+
+##### `scale_value(value: int) -> int`
+
+Scale a numeric value by the DPI factor.
+
+**Example:**
+
+```python
+from tkinter import Label
+
+root = Tk()
+# Scale font size to maintain physical size across different DPI settings
+label = Label(root, text="Hello", font=("Arial", root.scale_value(12)))
+```
+
+##### `scale_geometry(geometry: str) -> str`
+
+Scale a geometry string ("WxH+X+Y") by the DPI factor.
+
+**Example:**
+
+```python
+root = Tk()
+# Scale window geometry (width x height + x + y)
+root.geometry(root.scale_geometry("800x600+100+50"))
+```
 
 ### Exceptions
 
@@ -147,7 +157,3 @@ A drop-in replacement for `tkinter.Tk` with DPI awareness.
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
-## Acknowledgments
-
-This project is based on the solution from [this Stack Overflow answer](https://stackoverflow.com/questions/41315873/attempting-to-resolve-blurred-tkinter-text-scaling-on-windows-10-high-dpi-disp).
