@@ -37,3 +37,22 @@ __all__ = [
     "UnsupportedPlatformError",
     "__version__",
 ]
+
+
+def _test() -> None:
+    """Run a test window to verify DPI awareness is working.
+
+    This function displays a simple GUI window showing the detected DPI
+    settings and scaling factor. Use this to verify that tkinter-unblur
+    is correctly installed and functioning.
+
+    Example:
+        >>> import tkinter_unblur
+        >>> tkinter_unblur._test()
+
+    Note:
+        This is equivalent to running: python -m tkinter_unblur
+    """
+    from tkinter_unblur.__main__ import main
+
+    main()
