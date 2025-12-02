@@ -12,7 +12,6 @@ And update your imports:
     # New (recommended)
     from tkinter_unblur import Tk
 
-This compatibility package will be maintained until January 2027.
 For more information, see: https://github.com/unlibra/tkinter-unblur
 """
 
@@ -29,8 +28,7 @@ _warnings.warn(
     "  from hdpitkinter import HdpiTk\n\n"
     "  # New import (recommended)\n"
     "  from tkinter_unblur import Tk\n\n"
-    "This compatibility package will be removed in January 2027.\n"
-    "See: https://github.com/unlibra/tkinter-unblur#migrating-from-hdpitkinter",
+    "See: https://github.com/unlibra/tkinter-unblur",
     DeprecationWarning,
     stacklevel=2,
 )
@@ -43,21 +41,16 @@ from tkinter_unblur import (
     TkinterUnblurError,
     UnsupportedPlatformError,
     __version__,
-    get_dpi_info,
-    scale_geometry,
 )
 
 # Legacy version tracking
 VERSION = __version__
 
 __all__ = [
+    "DPIDetectionError",
     "HdpiTk",
     "Tk",
-    "get_dpi_info",
-    "scale_geometry",
     "TkinterUnblurError",
     "UnsupportedPlatformError",
-    "DPIDetectionError",
     "__version__",
-    "VERSION",
 ]

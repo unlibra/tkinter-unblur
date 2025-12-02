@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 import sys
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -17,9 +17,7 @@ except ImportError:
     TKINTER_AVAILABLE = False
 
 # Skip entire module if tkinter is not available
-pytestmark = pytest.mark.skipif(
-    not TKINTER_AVAILABLE, reason="tkinter not available"
-)
+pytestmark = pytest.mark.skipif(not TKINTER_AVAILABLE, reason="tkinter not available")
 
 if TKINTER_AVAILABLE:
     from tkinter_unblur import __version__
@@ -221,7 +219,7 @@ class TestMetaPackageCompatibility:
             del sys.modules["hdpitkinter"]
 
         with pytest.warns(DeprecationWarning, match="renamed to 'tkinter-unblur'"):
-            import hdpitkinter
+            pass
 
     def test_hdpitkinter_exports_hdpitk(self) -> None:
         """hdpitkinter should export HdpiTk for backwards compatibility."""
