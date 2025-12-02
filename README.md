@@ -23,6 +23,12 @@ from tkinter_unblur import Tk
 
 That's it. One import change, and your Tkinter app renders sharply.
 
+### Visual Comparison
+
+![Blurry vs Sharp Comparison](images/comparison.png)
+
+**Left:** Standard Tkinter (blurry) | **Right:** tkinter-unblur (sharp)
+
 ## Installation
 
 ```bash
