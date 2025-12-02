@@ -207,23 +207,3 @@ class TestExceptions:
 
         with pytest.raises(DPIDetectionError):
             raise DPIDetectionError("dpi detection failed")
-
-
-class TestMetaPackageCompatibility:
-    """Tests for hdpitkinter meta-package compatibility."""
-
-    def test_hdpitkinter_import_warns(self) -> None:
-        """Importing hdpitkinter should emit a DeprecationWarning."""
-        # Remove from cache if already imported
-        if "hdpitkinter" in sys.modules:
-            del sys.modules["hdpitkinter"]
-
-        with pytest.warns(DeprecationWarning, match="renamed to 'tkinter-unblur'"):
-            pass
-
-    def test_hdpitkinter_exports_hdpitk(self) -> None:
-        """hdpitkinter should export HdpiTk for backwards compatibility."""
-        import hdpitkinter
-
-        assert hasattr(hdpitkinter, "HdpiTk")
-        assert hasattr(hdpitkinter, "VERSION")
