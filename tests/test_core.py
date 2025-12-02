@@ -23,7 +23,7 @@ pytestmark = pytest.mark.skipif(
 
 if TKINTER_AVAILABLE:
     from tkinter_unblur import __version__
-    from tkinter_unblur.core import get_dpi_info, scale_geometry
+    from tkinter_unblur.core import _get_dpi_info, _scale_geometry
 
 
 class TestVersion:
@@ -41,38 +41,38 @@ class TestScaleGeometry:
 
     def test_scale_geometry_100_percent(self) -> None:
         """Test scaling at 100% (no change)."""
-        result = scale_geometry("800x600+100+50", lambda v: int(float(v)))
+        result = _scale_geometry("800x600+100+50", lambda v: int(float(v)))
         assert result == "800x600+100+50"
 
     def test_scale_geometry_150_percent(self) -> None:
         """Test scaling at 150%."""
-        result = scale_geometry("800x600+100+50", lambda v: int(float(v) * 1.5))
+        result = _scale_geometry("800x600+100+50", lambda v: int(float(v) * 1.5))
         assert result == "1200x900+150+75"
 
     def test_scale_geometry_200_percent(self) -> None:
         """Test scaling at 200%."""
-        result = scale_geometry("800x600+100+50", lambda v: int(float(v) * 2.0))
+        result = _scale_geometry("800x600+100+50", lambda v: int(float(v) * 2.0))
         assert result == "1600x1200+200+100"
 
     def test_scale_geometry_125_percent(self) -> None:
         """Test scaling at 125%."""
-        result = scale_geometry("800x600+100+50", lambda v: int(float(v) * 1.25))
+        result = _scale_geometry("800x600+100+50", lambda v: int(float(v) * 1.25))
         assert result == "1000x750+125+62"
 
     def test_scale_geometry_negative_position(self) -> None:
         """Test scaling with negative position values."""
-        result = scale_geometry("800x600+-100+-50", lambda v: int(float(v) * 1.5))
+        result = _scale_geometry("800x600+-100+-50", lambda v: int(float(v) * 1.5))
         assert result == "1200x900+-150+-75"
 
     def test_scale_geometry_invalid_format(self) -> None:
         """Test that invalid geometry raises ValueError."""
         with pytest.raises(ValueError, match="Invalid geometry string format"):
-            scale_geometry("invalid", lambda v: int(float(v)))
+            _scale_geometry("invalid", lambda v: int(float(v)))
 
     def test_scale_geometry_partial_format(self) -> None:
         """Test that partial geometry raises ValueError."""
         with pytest.raises(ValueError, match="Invalid geometry string format"):
-            scale_geometry("800x600", lambda v: int(float(v)))
+            _scale_geometry("800x600", lambda v: int(float(v)))
 
 
 class TestGetDpiInfo:
@@ -81,7 +81,7 @@ class TestGetDpiInfo:
     def test_non_windows_returns_none_dpi(self) -> None:
         """On non-Windows, DPI values should be None with scaling 1.0."""
         with patch.object(os, "name", "posix"), patch.object(sys, "platform", "linux"):
-            dpi_x, dpi_y, scaling = get_dpi_info(12345)
+            dpi_x, dpi_y, scaling = _get_dpi_info(12345)
             assert dpi_x is None
             assert dpi_y is None
             assert scaling == 1.0
@@ -99,7 +99,7 @@ class TestGetDpiInfo:
             pytest.skip("Windows-only test")
 
         with patch("ctypes.WinDLL", side_effect=OSError("DLL not found")):
-            dpi_x, dpi_y, scaling = get_dpi_info(12345)
+            dpi_x, dpi_y, scaling = _get_dpi_info(12345)
             assert dpi_x == 96
             assert dpi_y == 96
             assert scaling == 1.0

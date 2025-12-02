@@ -41,8 +41,6 @@ from tkinter_unblur import (
     TkinterUnblurError,
     UnsupportedPlatformError,
     __version__,
-    get_dpi_info,
-    scale_geometry,
 )
 
 # Legacy version tracking (matches new package)
@@ -56,6 +54,4 @@ __all__ = [
     "TkinterUnblurError",
     "UnsupportedPlatformError",
     "__version__",
-    "get_dpi_info",
-    "scale_geometry",
 ]

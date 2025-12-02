@@ -15,12 +15,12 @@ from typing import TYPE_CHECKING, Callable
 if TYPE_CHECKING:
     from re import Match
 
-__all__ = ["Tk", "get_dpi_info", "scale_geometry"]
+__all__ = ["Tk"]
 
 logger = logging.getLogger(__name__)
 
 
-def get_dpi_info(window_handle: int) -> tuple[int | None, int | None, float]:
+def _get_dpi_info(window_handle: int) -> tuple[int | None, int | None, float]:
     """Get DPI information for a window.
 
     Detects the DPI settings for the monitor containing the specified window
@@ -50,7 +50,7 @@ def get_dpi_info(window_handle: int) -> tuple[int | None, int | None, float]:
     return x, y, scaling
 
 
-def scale_geometry(geometry: str, scale_func: Callable[[str], int]) -> str:
+def _scale_geometry(geometry: str, scale_func: Callable[[str], int]) -> str:
     """Scale a Tkinter geometry string.
 
     Converts a geometry string like "800x600+100+50" by applying the
@@ -136,7 +136,7 @@ class Tk(_TkBase):
 
     def _apply_dpi_awareness(self) -> None:
         """Apply DPI awareness settings to this window."""
-        self.dpi_x, self.dpi_y, self.dpi_scaling = get_dpi_info(self.winfo_id())
+        self.dpi_x, self.dpi_y, self.dpi_scaling = _get_dpi_info(self.winfo_id())
 
     def scale_value(self, value: float | str) -> int:
         """Scale a value according to the current DPI scaling factor.
@@ -168,7 +168,7 @@ class Tk(_TkBase):
             >>> root.scale_geometry("800x600+100+50")
             "1200x900+150+75"
         """
-        return scale_geometry(geometry, self.scale_value)
+        return _scale_geometry(geometry, self.scale_value)
 
 
 # Backwards compatibility alias

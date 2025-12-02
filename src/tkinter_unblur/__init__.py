@@ -21,7 +21,7 @@ Or scale values manually:
 
 from __future__ import annotations
 
-from tkinter_unblur.core import HdpiTk, Tk, get_dpi_info, scale_geometry
+from tkinter_unblur.core import HdpiTk, Tk
 from tkinter_unblur.exceptions import (
     DPIDetectionError,
     TkinterUnblurError,
@@ -36,6 +36,4 @@ __all__ = [
     "TkinterUnblurError",
     "UnsupportedPlatformError",
     "__version__",
-    "get_dpi_info",
-    "scale_geometry",
 ]

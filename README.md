@@ -21,7 +21,7 @@ from tkinter import Tk
 from tkinter_unblur import Tk
 ```
 
-That's it. One import change, and your Tkinter app renders crisply.
+That's it. One import change, and your Tkinter app renders sharply.
 
 ## Installation
 
@@ -55,15 +55,16 @@ print(f"Scaling: {root.dpi_scaling:.0%}")  # e.g., "Scaling: 150%"
 ### Scale Values Manually
 
 ```python
+from tkinter import Label
 from tkinter_unblur import Tk
 
 root = Tk()
 
-# Scale a single value
-button_width = root.scale_value(100)  # Returns 150 at 150% scaling
+# Scale font sizes to maintain physical size across different DPI settings
+label = Label(root, text="Hello", font=("Arial", root.scale_value(12)))
 
-# Scale a geometry string
-scaled_geometry = root.scale_geometry("800x600+100+50")  # "1200x900+150+75"
+# Scale window geometry (width x height + x + y)
+root.geometry(root.scale_geometry("800x600+100+50"))
 ```
 
 ## Compatibility
@@ -121,28 +122,21 @@ from tkinter_unblur import HdpiTk  # Works, but Tk is preferred
 A drop-in replacement for `tkinter.Tk` with DPI awareness.
 
 **Attributes:**
+
 - `dpi_x: int | None` - Horizontal DPI (96 = 100% scaling)
 - `dpi_y: int | None` - Vertical DPI (96 = 100% scaling)
 - `dpi_scaling: float` - Scaling factor (1.0 = 100%, 1.5 = 150%)
 
 **Methods:**
+
 - `scale_value(value) -> int` - Scale a numeric value by the DPI factor
 - `scale_geometry(geometry) -> str` - Scale a geometry string ("WxH+X+Y")
-
-### Utility Functions
-
-- `get_dpi_info(window_handle) -> tuple[int | None, int | None, float]`
-- `scale_geometry(geometry, scale_func) -> str`
 
 ### Exceptions
 
 - `TkinterUnblurError` - Base exception
 - `UnsupportedPlatformError` - Platform doesn't support DPI awareness
 - `DPIDetectionError` - DPI detection failed
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
