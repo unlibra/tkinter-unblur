@@ -84,13 +84,6 @@ class TestGetDpiInfo:
             assert dpi_y is None
             assert scaling == 1.0
 
-    @pytest.mark.skipif(os.name != "nt", reason="Windows-only test")
-    def test_windows_returns_valid_dpi(self) -> None:
-        """On Windows, should return valid DPI values."""
-        # This test would require a real window handle on Windows
-        # For CI, we'll mock the Windows APIs
-        pass
-
     def test_windows_dll_load_failure(self) -> None:
         """Test graceful handling when Windows DLLs fail to load."""
         if os.name != "nt":
@@ -162,6 +155,53 @@ class TestTkClass:
             # Should return a valid geometry string
             assert "x" in result
             assert "+" in result
+        finally:
+            root.destroy()
+
+    @pytest.mark.skipif(
+        os.environ.get("DISPLAY") is None and os.name != "nt",
+        reason="No display available",
+    )
+    def test_tk_scale_value_zero(self) -> None:
+        """Test scale_value with zero."""
+        from tkinter_unblur import Tk
+
+        root = Tk()
+        try:
+            result = root.scale_value(0)
+            assert result == 0
+        finally:
+            root.destroy()
+
+    @pytest.mark.skipif(
+        os.environ.get("DISPLAY") is None and os.name != "nt",
+        reason="No display available",
+    )
+    def test_tk_scale_value_float(self) -> None:
+        """Test scale_value with float input."""
+        from tkinter_unblur import Tk
+
+        root = Tk()
+        try:
+            result = root.scale_value(100.5)
+            assert isinstance(result, int)
+            assert result >= 100
+        finally:
+            root.destroy()
+
+    @pytest.mark.skipif(
+        os.environ.get("DISPLAY") is None and os.name != "nt",
+        reason="No display available",
+    )
+    def test_tk_scale_value_string(self) -> None:
+        """Test scale_value with string input."""
+        from tkinter_unblur import Tk
+
+        root = Tk()
+        try:
+            result = root.scale_value("100")
+            assert isinstance(result, int)
+            assert result >= 100
         finally:
             root.destroy()
 
