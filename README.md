@@ -2,8 +2,10 @@
 
 [![PyPI version](https://badge.fury.io/py/tkinter-unblur.svg)](https://badge.fury.io/py/tkinter-unblur)
 [![Python versions](https://img.shields.io/pypi/pyversions/tkinter-unblur.svg)](https://pypi.org/project/tkinter-unblur/)
-[![License](https://img.shields.io/github/license/unlibra/tkinter-unblur.svg)](https://github.com/unlibra/tkinter-unblur/blob/master/LICENSE)
+<!-- [![Downloads](https://static.pepy.tech/badge/tkinter-unblur)](https://pepy.tech/project/tkinter-unblur) -->
+[![Type checked](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 [![CI](https://github.com/unlibra/tkinter-unblur/actions/workflows/ci.yml/badge.svg)](https://github.com/unlibra/tkinter-unblur/actions)
+[![License](https://img.shields.io/github/license/unlibra/tkinter-unblur.svg)](https://github.com/unlibra/tkinter-unblur/blob/master/LICENSE)
 
 > **Note:** `hdpitkinter` has been reborn as `tkinter-unblur` with modern features. See [migration guide](#migrating-from-hdpitkinter).
 
@@ -49,56 +51,6 @@ root.mainloop()
 ```
 
 That's all you need! For advanced usage, see [API Reference](#api-reference).
-
-## Compatibility
-
-| Platform | Status |
-|----------|--------|
-| Windows 10/11 | Full DPI awareness support |
-| Linux | Passthrough (OS handles DPI) |
-| macOS | Passthrough (OS handles DPI) |
-
-| Python Version | Status |
-|----------------|--------|
-| 3.9+ | Supported |
-| 3.8 | Not supported (EOL) |
-
-## How It Works
-
-On Windows, this library:
-
-1. Calls `SetProcessDpiAwareness(1)` to enable system DPI awareness
-2. Queries the monitor's DPI using `GetDpiForMonitor`
-3. Provides scaling utilities for your application
-
-On non-Windows platforms, the library is a simple passthrough to `tkinter.Tk`.
-
-The implementation is based on [this Stack Overflow answer](https://stackoverflow.com/questions/41315873/attempting-to-resolve-blurred-tkinter-text-scaling-on-windows-10-high-dpi-disp).
-
-## Migrating from hdpitkinter
-
-This package was formerly known as `hdpitkinter`. To migrate:
-
-```bash
-pip uninstall hdpitkinter
-pip install tkinter-unblur
-```
-
-```python
-# Old
-from hdpitkinter import HdpiTk
-root = HdpiTk()
-
-# New
-from tkinter_unblur import Tk
-root = Tk()
-```
-
-The `HdpiTk` name is still available as an alias for backwards compatibility:
-
-```python
-from tkinter_unblur import HdpiTk  # Works, but Tk is preferred
-```
 
 ## API Reference
 
@@ -153,6 +105,56 @@ root.geometry(root.scale_geometry("800x600+100+50"))
 - `TkinterUnblurError` - Base exception
 - `UnsupportedPlatformError` - Platform doesn't support DPI awareness
 - `DPIDetectionError` - DPI detection failed
+
+## How It Works
+
+On Windows, this library:
+
+1. Calls `SetProcessDpiAwareness(1)` to enable system DPI awareness
+2. Queries the monitor's DPI using `GetDpiForMonitor`
+3. Provides scaling utilities for your application
+
+On non-Windows platforms, the library is a simple passthrough to `tkinter.Tk`.
+
+The implementation is based on [this Stack Overflow answer](https://stackoverflow.com/questions/41315873/attempting-to-resolve-blurred-tkinter-text-scaling-on-windows-10-high-dpi-disp).
+
+## Compatibility
+
+| Platform | Status |
+|----------|--------|
+| Windows 10/11 | Full DPI awareness support |
+| Linux | Passthrough (OS handles DPI) |
+| macOS | Passthrough (OS handles DPI) |
+
+| Python Version | Status |
+|----------------|--------|
+| 3.9+ | Supported |
+| 3.8 | Not supported (EOL) |
+
+## Migrating from hdpitkinter
+
+This package was formerly known as `hdpitkinter`. To migrate:
+
+```bash
+pip uninstall hdpitkinter
+pip install tkinter-unblur
+```
+
+```python
+# Old
+from hdpitkinter import HdpiTk
+root = HdpiTk()
+
+# New
+from tkinter_unblur import Tk
+root = Tk()
+```
+
+The `HdpiTk` name is still available as an alias for backwards compatibility:
+
+```python
+from tkinter_unblur import HdpiTk  # Works, but Tk is preferred
+```
 
 ## License
 
