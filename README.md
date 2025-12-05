@@ -1,6 +1,5 @@
 # tkinter-unblur
 
-[![PyPI version](https://badge.fury.io/py/tkinter-unblur.svg)](https://badge.fury.io/py/tkinter-unblur)
 [![PyPI version](https://img.shields.io/pypi/v/tkinter-unblur)](https://pypi.org/project/tkinter-unblur/)
 [![Downloads](https://static.pepy.tech/badge/tkinter-unblur)](https://pepy.tech/project/tkinter-unblur)
 [![Python versions](https://img.shields.io/pypi/pyversions/tkinter-unblur.svg)](https://pypi.org/project/tkinter-unblur/)
