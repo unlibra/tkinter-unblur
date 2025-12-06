@@ -1,8 +1,8 @@
 # tkinter-unblur
 
-[![PyPI version](https://badge.fury.io/py/tkinter-unblur.svg)](https://badge.fury.io/py/tkinter-unblur)
+[![PyPI version](https://img.shields.io/pypi/v/tkinter-unblur)](https://pypi.org/project/tkinter-unblur/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/tkinter-unblur)](https://pepy.tech/project/tkinter-unblur)
 [![Python versions](https://img.shields.io/pypi/pyversions/tkinter-unblur.svg)](https://pypi.org/project/tkinter-unblur/)
-<!-- [![Downloads](https://static.pepy.tech/badge/tkinter-unblur)](https://pepy.tech/project/tkinter-unblur) -->
 [![Type checked](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 [![CI](https://github.com/unlibra/tkinter-unblur/actions/workflows/ci.yml/badge.svg)](https://github.com/unlibra/tkinter-unblur/actions)
 [![License](https://img.shields.io/github/license/unlibra/tkinter-unblur.svg)](https://github.com/unlibra/tkinter-unblur/blob/master/LICENSE)
