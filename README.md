@@ -128,7 +128,7 @@ The implementation is based on [this Stack Overflow answer](https://stackoverflo
 
 | Python Version | Status |
 |----------------|--------|
-| 3.9+ | Supported |
+| 3.9 - 3.14 | Supported |
 | 3.8 | Not supported (EOL) |
 
 ## Migrating from hdpitkinter
