@@ -49,7 +49,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/unlibra/tkinter-unblur"
-Documentation = "https://github.com/unlibra/tkinter-unblur#readme"
+Documentation = "https://unlibra.github.io/tkinter-unblur/"
 Repository = "https://github.com/unlibra/tkinter-unblur"
 Issues = "https://github.com/unlibra/tkinter-unblur/issues"
 Changelog = "https://github.com/unlibra/tkinter-unblur/releases"
