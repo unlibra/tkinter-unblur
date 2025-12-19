@@ -53,7 +53,9 @@ const config: Config = {
           customCss: './src/css/custom.css',
         },
         sitemap: {
-          lastmod: 'date',
+          lastmod: null,
+          changefreq: null,
+          priority: null,
           ignorePatterns: ['/tags/**'],
           filename: 'sitemap.xml',
         },
