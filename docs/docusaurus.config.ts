@@ -50,7 +50,7 @@ const config: Config = {
         },
         blog: false, // Disable blog for now
         theme: {
-          customCss: './src/css/custom.css',
+          // customCss: './src/css/custom.css',
         },
         sitemap: {
           lastmod: null,
