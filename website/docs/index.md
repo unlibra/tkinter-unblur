@@ -1,7 +1,3 @@
----
-sidebar_position: 1
----
-
 # Introduction
 
 **Fix blurry Tkinter applications on Windows 10/11 high-DPI displays.**

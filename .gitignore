@@ -68,10 +68,9 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Website (Docusaurus)
-website/build/
-website/.docusaurus/
-website/.cache-loader/
+# Website (VitePress)
+website/docs/.vitepress/dist/
+website/docs/.vitepress/cache/
 
 # PyBuilder
 target/
