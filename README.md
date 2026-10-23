@@ -106,8 +106,8 @@ root.geometry(root.scale_geometry("800x600+100+50"))
 ### Exceptions
 
 - `TkinterUnblurError` - Base exception
-- `UnsupportedPlatformError` - Platform doesn't support DPI awareness
-- `DPIDetectionError` - DPI detection failed
+- `UnsupportedPlatformError` - Reserved, not currently raised (non-Windows: `dpi_scaling` is `1.0`)
+- `DPIDetectionError` - Reserved, not currently raised (on failure: warning logged, `dpi_scaling` is `1.0`)
 
 ## How It Works
 

@@ -79,13 +79,23 @@ root.geometry(root.scale_geometry("800x600+100+50"))
 
 ## Exceptions
 
-The library defines the following exceptions in `tkinter_unblur.exceptions`:
+The library defines the following exceptions in `tkinter_unblur.exceptions`.
+
+`UnsupportedPlatformError` and `DPIDetectionError` are reserved for future use. The library does not currently raise them; it falls back to default values instead (see below).
 
 ### `TkinterUnblurError`
-Base exception for all errors raised by this library.
+Base exception for this library's custom exceptions.
 
 ### `UnsupportedPlatformError`
-Raised when attempting to use Windows-specific features on a non-Windows platform (though the main `Tk` class handles this gracefully by disabling DPI features).
+Reserved. Not currently raised.
+
+On non-Windows platforms, `Tk` skips DPI detection and sets `dpi_x = None`, `dpi_y = None` and `dpi_scaling = 1.0`.
 
 ### `DPIDetectionError`
-Raised when DPI detection fails on Windows.
+Reserved. Not currently raised.
+
+On Windows, if DPI detection fails, the library logs a warning through the `logging` module (logger `tkinter_unblur._windows`) and sets `dpi_x = 96`, `dpi_y = 96` and `dpi_scaling = 1.0` (100% scaling). This happens when:
+
+- `shcore.dll` or `user32.dll` cannot be loaded
+- The monitor for the window cannot be determined
+- `GetDpiForMonitor` returns an error code or fails

@@ -10,23 +10,25 @@ class TkinterUnblurError(Exception):
 
 
 class UnsupportedPlatformError(TkinterUnblurError):
-    """Raised when the platform does not support DPI awareness features.
+    """Reserved for platforms that do not support DPI awareness features.
 
-    This typically occurs on non-Windows platforms where the DPI awareness
-    APIs are not available. The library will still work, but DPI scaling
-    will not be applied.
+    This exception is not currently raised. On non-Windows platforms,
+    DPI detection is skipped and Tk sets dpi_x and dpi_y to None and
+    dpi_scaling to 1.0.
     """
 
     pass
 
 
 class DPIDetectionError(TkinterUnblurError):
-    """Raised when DPI detection fails.
+    """Reserved for DPI detection failures on Windows.
 
-    This can occur when:
-    - The window handle is invalid
-    - The monitor cannot be determined
-    - The DPI query fails for any reason
+    This exception is not currently raised. When DPI detection fails,
+    a warning is logged and Tk falls back to dpi_x = 96, dpi_y = 96 and
+    dpi_scaling = 1.0 (100% scaling). This happens when:
+    - The Windows DLLs (shcore, user32) cannot be loaded
+    - The monitor for the window cannot be determined
+    - The DPI query (GetDpiForMonitor) fails
     """
 
     pass
