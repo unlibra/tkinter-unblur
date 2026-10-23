@@ -14,6 +14,9 @@ oneliner  SetProcessDpiAwareness(1), then tkinter.Tk() (reference order)
 unblur    tkinter_unblur.Tk()
 
 The "unblur" output should match the "oneliner" output.
+
+"window size" is the natural size before the window is enlarged to at
+least 480x160 for viewing.
 """
 
 from __future__ import annotations
@@ -101,6 +104,9 @@ def main() -> None:
     for key, value in results.items():
         print(f"{key:28} {value}")  # noqa: T201
 
+    # Enlarge the window only after measuring its natural size, so the title
+    # bar is readable without changing the printed values
+    root.minsize(480, 160)
     root.mainloop()
 
 
