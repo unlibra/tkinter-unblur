@@ -5,7 +5,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/tkinter-unblur.svg)](https://pypi.org/project/tkinter-unblur/)
 [![Type checked](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 [![CI](https://github.com/unlibra/tkinter-unblur/actions/workflows/ci.yml/badge.svg)](https://github.com/unlibra/tkinter-unblur/actions)
-[![License](https://img.shields.io/github/license/unlibra/tkinter-unblur.svg)](https://github.com/unlibra/tkinter-unblur/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/unlibra/tkinter-unblur.svg)](https://github.com/unlibra/tkinter-unblur/blob/main/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-online-blue)](https://docs.unlibra.com/tkinter-unblur/)
 
 > **Note:** `hdpitkinter` has been reborn as `tkinter-unblur` with modern features. See [migration guide](#migrating-from-hdpitkinter).

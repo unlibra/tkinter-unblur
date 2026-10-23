@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=77.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 # ==============================================================================
@@ -11,9 +11,9 @@ version = "2.0.1"
 description = "Fix blurry Tkinter applications on Windows 10/11 high-DPI displays"
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
-    {name = "unlibra", email = "your.email@example.com"},
+    {name = "unlibra"},
 ]
 keywords = [
     "tkinter",
@@ -32,7 +32,6 @@ keywords = [
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
