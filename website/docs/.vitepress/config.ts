@@ -78,6 +78,9 @@ export default defineConfig({
       {
         items: [
           { text: 'Introduction', link: '/' },
+          { text: 'Why Tkinter Looks Blurry', link: '/why-blurry' },
+          { text: 'Compared to ctypes', link: '/vs-ctypes' },
+          { text: 'FAQ', link: '/faq' },
           { text: 'API Reference', link: '/api' }
         ]
       }
