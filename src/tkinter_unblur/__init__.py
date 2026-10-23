@@ -40,11 +40,12 @@ __all__ = [
 
 
 def _test() -> None:
-    """Run a test window to verify DPI awareness is working.
+    """Run a demo window that shows the detected DPI and scaling factor.
 
     This function displays a simple GUI window showing the detected DPI
-    settings and scaling factor. Use this to verify that tkinter-unblur
-    is correctly installed and functioning.
+    settings and scaling factor. It reports the scaling only; to confirm
+    that DPI awareness was set, enable debug logging and look for
+    "SetProcessDpiAwareness(1) succeeded".
 
     Example:
         >>> import tkinter_unblur

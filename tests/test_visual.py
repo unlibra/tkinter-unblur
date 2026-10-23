@@ -5,7 +5,8 @@ Run this on a Windows machine with high-DPI display to verify text is sharp.
 This test shows THREE windows:
 1. Standard tkinter.Tk (DPI-unaware) - LARGE and BLURRY
 2. tkinter-unblur with scaling - LARGE and SHARP (recommended approach)
-3. tkinter-unblur without scaling - SMALL and SHARP (shows what happens without scale_geometry)
+3. tkinter-unblur without scale_geometry - SHARP, but the window is smaller and
+   the text, which Tk scales itself, may not fit
 """
 
 import subprocess
@@ -22,7 +23,7 @@ def main() -> None:
     print("Launching THREE windows for comparison:")
     print("1. LEFT:   Standard Tk (DPI-unaware) - Large but blurry")
     print("2. MIDDLE: Unblur Tk with scaling - Large and sharp ✓")
-    print("3. RIGHT:  Unblur Tk no scaling - Small but sharp")
+    print("3. RIGHT:  Unblur Tk no scale_geometry - Sharp, small window")
     print()
 
     test_dir = Path(__file__).parent
@@ -66,22 +67,16 @@ root.geometry(root.scale_geometry("450x400+550+100"))
 frame = ttk.Frame(root, padding=20)
 frame.pack(fill="both", expand=True)
 
-# Scale font sizes to match physical size of standard Tk
-ttk.Label(frame, text="tkinter-unblur Tk", font=("Segoe UI", root.scale_value(28), "bold")).pack(pady=8)
-ttk.Label(frame, text="SHARP", font=("Segoe UI", root.scale_value(16)), foreground="green").pack(pady=8)
-ttk.Label(frame, text="Using scale_geometry()", font=("Segoe UI", root.scale_value(12))).pack(pady=5)
+# Tk scales point-sized fonts itself since 3.0.0; only pixel values need scaling
+ttk.Label(frame, text="tkinter-unblur Tk", font=("Segoe UI", 28, "bold")).pack(pady=8)
+ttk.Label(frame, text="SHARP", font=("Segoe UI", 16), foreground="green").pack(pady=8)
+ttk.Label(frame, text="Using scale_geometry()", font=("Segoe UI", 12)).pack(pady=5)
 ttk.Label(frame, text="abcdefghijklmnopqrstuvwxyz\\nABCDEFGHIJKLMNOPQRSTUVWXYZ\\n0123456789",
-          font=("Segoe UI", root.scale_value(14)), justify="center").pack(pady=8)
+          font=("Segoe UI", 14), justify="center").pack(pady=8)
 
 info = f"DPI: {root.dpi_x}x{root.dpi_y}  ({root.dpi_scaling:.0%})"
-ttk.Label(frame, text=info, font=("Consolas", root.scale_value(10))).pack(pady=2)
-
-button = ttk.Button(frame, text="Test Button", width=18)
-button.configure(style="Scaled.TButton")
-# Create a custom style with scaled font
-style = ttk.Style()
-style.configure("Scaled.TButton", font=("Segoe UI", root.scale_value(9)))
-button.pack(pady=5)
+ttk.Label(frame, text=info, font=("Consolas", 10)).pack(pady=2)
+ttk.Button(frame, text="Test Button", width=18).pack(pady=5)
 
 root.mainloop()
 """
@@ -128,7 +123,7 @@ root.mainloop()
         print("-" * 70)
         print("Window 1 (LEFT):   Large, blurry text (avoid this!)")
         print("Window 2 (MIDDLE): Large, sharp text (recommended! ✓)")
-        print("Window 3 (RIGHT):  Small, sharp text (need to scale manually)")
+        print("Window 3 (RIGHT):  Sharp text in a smaller window (text may not fit)")
         print()
         print("RECOMMENDATION:")
         print("Use tkinter_unblur.Tk with scale_geometry() like Window 2")

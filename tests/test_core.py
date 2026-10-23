@@ -67,10 +67,27 @@ class TestScaleGeometry:
         with pytest.raises(ValueError, match="Invalid geometry string format"):
             _scale_geometry("invalid", lambda v: int(float(v)))
 
-    def test_scale_geometry_partial_format(self) -> None:
-        """Test that partial geometry raises ValueError."""
+    @pytest.mark.parametrize(
+        ("geometry", "expected"),
+        [
+            ("800x600", "1200x900"),
+            ("+100+50", "+150+75"),
+            ("-100-50", "-150-75"),
+            ("800x600-100+50", "1200x900-150+75"),
+            ("=800x600+100+50", "=1200x900+150+75"),
+        ],
+    )
+    def test_scale_geometry_other_forms(self, geometry: str, expected: str) -> None:
+        """Test the other geometry forms that Tk accepts."""
+        assert _scale_geometry(geometry, lambda v: int(float(v) * 1.5)) == expected
+
+    @pytest.mark.parametrize(
+        "geometry", ["", "800", "x600", "800x", "800x600+100", "800x600+100+50x"]
+    )
+    def test_scale_geometry_partial_format(self, geometry: str) -> None:
+        """Test that incomplete geometry raises ValueError."""
         with pytest.raises(ValueError, match="Invalid geometry string format"):
-            _scale_geometry("800x600", lambda v: int(float(v)))
+            _scale_geometry(geometry, lambda v: int(float(v)))
 
 
 class TestGetDpiInfo:
@@ -104,8 +121,9 @@ class TestSetDpiAwareness:
         from tkinter_unblur.core import _set_dpi_awareness
 
         fake_windows = MagicMock()
-        with patch.object(sys, "platform", "linux"), patch.dict(
-            sys.modules, {"tkinter_unblur._windows": fake_windows}
+        with (
+            patch.object(sys, "platform", "linux"),
+            patch.dict(sys.modules, {"tkinter_unblur._windows": fake_windows}),
         ):
             _set_dpi_awareness()
         fake_windows.set_process_dpi_awareness.assert_not_called()
@@ -115,8 +133,9 @@ class TestSetDpiAwareness:
         from tkinter_unblur.core import _set_dpi_awareness
 
         fake_windows = MagicMock()
-        with patch.object(sys, "platform", "win32"), patch.dict(
-            sys.modules, {"tkinter_unblur._windows": fake_windows}
+        with (
+            patch.object(sys, "platform", "win32"),
+            patch.dict(sys.modules, {"tkinter_unblur._windows": fake_windows}),
         ):
             _set_dpi_awareness()
         fake_windows.set_process_dpi_awareness.assert_called_once_with()
@@ -130,13 +149,17 @@ class TestTkClass:
         from tkinter_unblur import Tk
 
         calls: list[str] = []
-        with patch(
-            "tkinter_unblur.core._set_dpi_awareness",
-            side_effect=lambda: calls.append("set_awareness"),
-        ), patch.object(
-            tkinter.Tk, "__init__", lambda self, **kwargs: calls.append("tk_init")
-        ), patch.object(
-            Tk, "_apply_dpi_awareness", lambda self: calls.append("get_dpi")
+        with (
+            patch(
+                "tkinter_unblur.core._set_dpi_awareness",
+                side_effect=lambda: calls.append("set_awareness"),
+            ),
+            patch.object(
+                tkinter.Tk, "__init__", lambda self, **kwargs: calls.append("tk_init")
+            ),
+            patch.object(
+                Tk, "_apply_dpi_awareness", lambda self: calls.append("get_dpi")
+            ),
         ):
             Tk()
         assert calls == ["set_awareness", "tk_init", "get_dpi"]
