@@ -52,7 +52,7 @@ Homepage = "https://github.com/unlibra/tkinter-unblur"
 Documentation = "https://docs.unlibra.com/tkinter-unblur/"
 Repository = "https://github.com/unlibra/tkinter-unblur"
 Issues = "https://github.com/unlibra/tkinter-unblur/issues"
-Changelog = "https://github.com/unlibra/tkinter-unblur/releases"
+Changelog = "https://github.com/unlibra/tkinter-unblur/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
