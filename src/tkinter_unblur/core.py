@@ -9,8 +9,9 @@ from __future__ import annotations
 import logging
 import re
 import sys
+from collections.abc import Callable
 from tkinter import Tk as _TkBase
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from re import Match
@@ -65,39 +66,52 @@ def _get_dpi_info(window_handle: int) -> tuple[int | None, int | None, float]:
     return x, y, scaling
 
 
+# Tk geometry: an optional "=", then "WxH", "+X+Y" (each sign + or -), or both
+_GEOMETRY_PATTERN = re.compile(
+    r"(?P<prefix>=?)"
+    r"(?:(?P<W>\d+)x(?P<H>\d+))?"
+    r"(?:(?P<XS>[+-])(?P<X>-?\d+)(?P<YS>[+-])(?P<Y>-?\d+))?"
+)
+
+
 def _scale_geometry(geometry: str, scale_func: Callable[[str], int]) -> str:
     """Scale a Tkinter geometry string.
 
-    Converts a geometry string like "800x600+100+50" by applying the
-    scale function to each numeric component.
+    Applies the scale function to each number of a geometry string in any
+    form Tk accepts: "WxH", "WxH+X+Y" (each sign + or -), or "+X+Y". The
+    signs, and an optional leading "=", are kept.
 
     Args:
-        geometry: A Tkinter geometry string in format "WxH+X+Y".
+        geometry: A Tkinter geometry string, such as "800x600" or
+            "800x600+100+50".
         scale_func: A function that takes a string number and returns
             the scaled integer value.
 
     Returns:
-        The scaled geometry string.
+        The scaled geometry string, in the same form as the input.
 
     Raises:
         ValueError: If the geometry string format is invalid.
 
     Example:
-        >>> scale_geometry("800x600+100+50", lambda v: int(float(v) * 1.5))
-        "1200x900+150+75"
+        >>> _scale_geometry("800x600+100+50", lambda v: int(float(v) * 1.5))
+        '1200x900+150+75'
+        >>> _scale_geometry("800x600", lambda v: int(float(v) * 1.5))
+        '1200x900'
     """
-    pattern = r"(?P<W>\d+)x(?P<H>\d+)\+(?P<X>-?\d+)\+(?P<Y>-?\d+)"
-    match: Match[str] | None = re.search(pattern, geometry)
+    match: Match[str] | None = _GEOMETRY_PATTERN.fullmatch(geometry.strip())
 
-    if match is None:
+    if match is None or (match.group("W") is None and match.group("X") is None):
         raise ValueError(f"Invalid geometry string format: {geometry!r}")
 
-    width = scale_func(match.group("W"))
-    height = scale_func(match.group("H"))
-    x = scale_func(match.group("X"))
-    y = scale_func(match.group("Y"))
-
-    return f"{width}x{height}+{x}+{y}"
+    result = match.group("prefix")
+    if match.group("W") is not None:
+        result += f"{scale_func(match.group('W'))}x{scale_func(match.group('H'))}"
+    if match.group("X") is not None:
+        x = scale_func(match.group("X"))
+        y = scale_func(match.group("Y"))
+        result += f"{match.group('XS')}{x}{match.group('YS')}{y}"
+    return result
 
 
 class Tk(_TkBase):
@@ -176,15 +190,21 @@ class Tk(_TkBase):
         """Scale a geometry string according to the current DPI scaling factor.
 
         Args:
-            geometry: A Tkinter geometry string in format "WxH+X+Y".
+            geometry: A Tkinter geometry string: "WxH", "WxH+X+Y" (each
+                sign + or -), or "+X+Y".
 
         Returns:
-            The scaled geometry string.
+            The scaled geometry string, in the same form as the input.
+
+        Raises:
+            ValueError: If the geometry string format is invalid.
 
         Example:
             >>> root = Tk()  # On a 150% scaled display
+            >>> root.scale_geometry("800x600")
+            '1200x900'
             >>> root.scale_geometry("800x600+100+50")
-            "1200x900+150+75"
+            '1200x900+150+75'
         """
         return _scale_geometry(geometry, self.scale_value)
 

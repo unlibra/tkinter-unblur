@@ -77,7 +77,7 @@ print(f"Scaling: {root.dpi_scaling:.0%}")  # e.g., "Scaling: 150%"
 
 #### Methods
 
-##### `scale_value(value: int) -> int`
+##### `scale_value(value: float | str) -> int`
 
 Scale a numeric value by the DPI factor.
 
@@ -96,14 +96,21 @@ Font sizes in points, such as `("Arial", 12)`, need no scaling: Tk already sizes
 
 ##### `scale_geometry(geometry: str) -> str`
 
-Scale a geometry string ("WxH+X+Y") by the DPI factor.
+Scale a geometry string by the DPI factor. It accepts every form `root.geometry()` accepts:
+
+- `"WxH"`, such as `"800x600"`
+- `"WxH+X+Y"`, such as `"800x600+100+50"`. Each sign can be `+` or `-`, as in `"800x600-100-50"`.
+- `"+X+Y"`, a position only. Each sign can be `+` or `-` here too.
+- Any of these with a leading `"="`
+
+The result has the same form as the input, with the signs kept. Any other string raises `ValueError`.
 
 **Example:**
 
 ```python
 root = Tk()
-# Scale window geometry (width x height + x + y)
-root.geometry(root.scale_geometry("800x600+100+50"))
+root.geometry(root.scale_geometry("800x600"))          # "1200x900" at 150%
+root.geometry(root.scale_geometry("800x600+100+50"))   # "1200x900+150+75" at 150%
 ```
 
 ### Exceptions
@@ -128,14 +135,14 @@ The implementation is based on [this Stack Overflow answer](https://stackoverflo
 
 | Platform | Status |
 |----------|--------|
-| Windows 10/11 | Full DPI awareness support |
+| Windows 10/11 | System DPI awareness (one DPI for all monitors, see [limitation](https://docs.unlibra.com/tkinter-unblur/why-blurry#limitation-monitors-with-different-scaling)) |
 | Linux | Passthrough (OS handles DPI) |
 | macOS | Passthrough (OS handles DPI) |
 
 | Python Version | Status |
 |----------------|--------|
-| 3.9 - 3.14 | Supported |
-| 3.8 | Not supported (EOL) |
+| 3.10 - 3.15 | Supported |
+| 3.9 and earlier | Not supported |
 
 ## Migrating from hdpitkinter
 

@@ -18,7 +18,7 @@ name = "hdpitkinter"
 version = "3.0.0"
 description = "Meta-package: hdpitkinter has been renamed to tkinter-unblur"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "MIT"
 authors = [
     {name = "unlibra"},
@@ -36,15 +36,15 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
 ]
 dependencies = [
-    "tkinter-unblur>=1.0.0",
+    "tkinter-unblur>=2.0.0",
 ]
 
 [project.urls]
