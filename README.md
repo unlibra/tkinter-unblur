@@ -12,7 +12,7 @@
 
 **Fix blurry Tkinter applications on Windows 10/11 high-DPI displays.**
 
-**[Documentation](https://docs.unlibra.com/tkinter-unblur/)**
+**[Documentation](https://docs.unlibra.com/tkinter-unblur/)** **[PyPI](https://pypi.org/project/tkinter-unblur/)**
 
 ## The Problem
 
