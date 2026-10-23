@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 import sys
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -96,8 +96,50 @@ class TestGetDpiInfo:
             assert scaling == 1.0
 
 
+class TestSetDpiAwareness:
+    """Tests for _set_dpi_awareness function."""
+
+    def test_non_windows_does_nothing(self) -> None:
+        """On non-Windows, the Windows module should not be used."""
+        from tkinter_unblur.core import _set_dpi_awareness
+
+        fake_windows = MagicMock()
+        with patch.object(sys, "platform", "linux"), patch.dict(
+            sys.modules, {"tkinter_unblur._windows": fake_windows}
+        ):
+            _set_dpi_awareness()
+        fake_windows.set_process_dpi_awareness.assert_not_called()
+
+    def test_windows_sets_awareness(self) -> None:
+        """On Windows, the process DPI awareness should be set."""
+        from tkinter_unblur.core import _set_dpi_awareness
+
+        fake_windows = MagicMock()
+        with patch.object(sys, "platform", "win32"), patch.dict(
+            sys.modules, {"tkinter_unblur._windows": fake_windows}
+        ):
+            _set_dpi_awareness()
+        fake_windows.set_process_dpi_awareness.assert_called_once_with()
+
+
 class TestTkClass:
     """Tests for the Tk class."""
+
+    def test_dpi_awareness_set_before_tk_init(self) -> None:
+        """DPI awareness must be set before tkinter.Tk creates the window."""
+        from tkinter_unblur import Tk
+
+        calls: list[str] = []
+        with patch(
+            "tkinter_unblur.core._set_dpi_awareness",
+            side_effect=lambda: calls.append("set_awareness"),
+        ), patch.object(
+            tkinter.Tk, "__init__", lambda self, **kwargs: calls.append("tk_init")
+        ), patch.object(
+            Tk, "_apply_dpi_awareness", lambda self: calls.append("get_dpi")
+        ):
+            Tk()
+        assert calls == ["set_awareness", "tk_init", "get_dpi"]
 
     @pytest.mark.skipif(
         os.environ.get("DISPLAY") is None and os.name != "nt",

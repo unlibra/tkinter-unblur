@@ -113,7 +113,7 @@ root.geometry(root.scale_geometry("800x600+100+50"))
 
 On Windows, this library:
 
-1. Calls `SetProcessDpiAwareness(1)` to enable system DPI awareness
+1. Calls `SetProcessDpiAwareness(1)` to enable system DPI awareness, before the Tk window is created
 2. Queries the monitor's DPI using `GetDpiForMonitor`
 3. Provides scaling utilities for your application
 
