@@ -82,6 +82,14 @@ jobs:
       - name: Check package
         run: twine check dist/*
 
+      # Installs the built wheel into a fresh environment and checks it as users
+      # receive it: version metadata, __version__ and the packaged files.
+      - name: Check the installed wheel
+        run: |
+          python -m venv /tmp/wheel-check
+          /tmp/wheel-check/bin/pip install dist/*.whl
+          /tmp/wheel-check/bin/python scripts/check_wheel.py
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
