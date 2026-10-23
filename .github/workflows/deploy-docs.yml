@@ -26,6 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history, so VitePress can read each page's last commit date
+          # for lastUpdated and the sitemap's <lastmod>.
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
         with:

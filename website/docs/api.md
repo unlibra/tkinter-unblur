@@ -1,3 +1,7 @@
+---
+description: "API reference for tkinter-unblur: the Tk class, a drop-in replacement for tkinter.Tk with DPI awareness, plus its attributes, scaling methods and exceptions."
+---
+
 # API Reference
 
 ## `Tk` Class
