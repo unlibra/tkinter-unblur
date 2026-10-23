@@ -43,7 +43,7 @@ root.geometry("800x600")
 root.mainloop()
 ```
 
-That's all you need! For advanced usage, see the [API Reference](./api).
+That's all you need! For advanced usage, see the [API Reference](./api). To learn what changes and why, see [Why Tkinter Looks Blurry on Windows](./why-blurry).
 
 ## Compatibility
 
