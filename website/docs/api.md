@@ -67,17 +67,28 @@ def scale_geometry(self, geometry: str) -> str
 ```
 
 **Arguments:**
-- `geometry`: A Tkinter geometry string in format `"WxH+X+Y"`.
+- `geometry`: A Tkinter geometry string in any form `root.geometry()` accepts:
+
+| Form | Example |
+|------|---------|
+| `"WxH"` | `"800x600"` |
+| `"WxH+X+Y"`, each sign `+` or `-` | `"800x600+100+50"`, `"800x600-100-50"` |
+| `"+X+Y"`, each sign `+` or `-` | `"+100+50"` |
+
+Each form can start with `"="`, as in `"=800x600+100+50"`.
 
 **Returns:**
-- The scaled geometry string.
+- The scaled geometry string, in the same form as the input. Signs and a leading `"="` are kept.
+
+**Raises:**
+- `ValueError`: If the string is not one of these forms, for example `"800x600+100"`. The message starts with `Invalid geometry string format:`.
 
 **Example:**
 
 ```python
 root = Tk()
-# Scale window geometry (width x height + x + y)
-root.geometry(root.scale_geometry("800x600+100+50"))
+root.geometry(root.scale_geometry("800x600"))          # "1200x900" at 150%
+root.geometry(root.scale_geometry("800x600+100+50"))   # "1200x900+150+75" at 150%
 ```
 
 ## Exceptions

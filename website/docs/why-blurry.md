@@ -33,14 +33,16 @@ Tkinter does not declare DPI awareness by default, so a Tkinter window is stretc
 
 When you create a window with `tkinter_unblur.Tk`, it does two things on Windows:
 
-1. **Declares the process as system DPI aware.** It calls the Windows API [`SetProcessDpiAwareness`](https://learn.microsoft.com/en-us/windows/win32/api/shellscalingapi/nf-shellscalingapi-setprocessdpiawareness) with `PROCESS_SYSTEM_DPI_AWARE`. Windows then stops stretching the window, and Tkinter draws text and widgets at the screen's real resolution.
+1. **Declares the process as system DPI aware.** Before the Tk window is created, it calls the Windows API [`SetProcessDpiAwareness`](https://learn.microsoft.com/en-us/windows/win32/api/shellscalingapi/nf-shellscalingapi-setprocessdpiawareness) with `PROCESS_SYSTEM_DPI_AWARE`. Windows then stops stretching the window, and Tkinter draws text and widgets at the screen's real resolution. Because the call comes first, Tk reads the real DPI and sizes fonts given in points for it.
 2. **Reads the DPI of the window's monitor.** It calls [`GetDpiForMonitor`](https://learn.microsoft.com/en-us/windows/win32/api/shellscalingapi/nf-shellscalingapi-getdpiformonitor) and stores the result as `dpi_x`, `dpi_y` and `dpi_scaling` (1.0 = 100%, 1.5 = 150%). If the query fails, it falls back to 96 DPI and a scaling of 1.0.
 
 On Linux and macOS it does neither, and `Tk` behaves exactly like `tkinter.Tk`.
 
 ## Why the window can look smaller
 
-Once Windows stops stretching the window, sizes given in pixels are real screen pixels. At 150% scaling, `root.geometry("800x600")` now covers fewer physical inches than before, so the window looks smaller, but sharp.
+Once Windows stops stretching the window, sizes given in pixels are real screen pixels, and Tk does not scale them. At 150% scaling, `root.geometry("800x600")` now covers fewer physical inches than before, so the window looks smaller, but sharp. The same goes for other pixel values, such as padding and canvas sizes.
+
+Text with a font size in points, such as `font=("Arial", 12)`, keeps its size, because Tk scales point sizes for the real DPI. So the text stays as large as before while the pixel-sized parts around it shrink, and the text may no longer fit.
 
 To keep the size the window had before, scale pixel values with the detected factor:
 
@@ -51,7 +53,7 @@ root = Tk()
 root.geometry(root.scale_geometry("800x600"))  # 1200x900 at 150%
 ```
 
-See [`scale_geometry` and `scale_value`](./api#methods) in the API reference.
+See [`scale_geometry` and `scale_value`](./api#methods) in the API reference. Do not scale font sizes in points with `scale_value()`: Tk already scales them, so the text would become too large.
 
 ## Limitation: monitors with different scaling
 

@@ -49,14 +49,14 @@ That's all you need! For advanced usage, see the [API Reference](./api). To lear
 
 | Platform | Status |
 |----------|--------|
-| Windows 10/11 | Full DPI awareness support |
+| Windows 10/11 | System DPI awareness (one DPI for all monitors, see [limitation](./why-blurry#limitation-monitors-with-different-scaling)) |
 | Linux | Passthrough (OS handles DPI) |
 | macOS | Passthrough (OS handles DPI) |
 
 | Python Version | Status |
 |----------------|--------|
-| 3.9 - 3.14 | Supported |
-| 3.8 | Not supported (EOL) |
+| 3.10 - 3.15 | Supported |
+| 3.9 and earlier | Not supported |
 
 ## Migrating from hdpitkinter
 

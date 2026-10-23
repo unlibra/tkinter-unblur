@@ -32,7 +32,7 @@ However, migrating to `tkinter-unblur` is strongly recommended.
 
 This project was unmaintained from 2020-2025. The new version includes:
 
-- **Python 3.9-3.13 support** (modern Python versions)
+- **Python 3.10-3.15 support** (modern Python versions)
 - **Modern packaging** (pyproject.toml, PEP 621)
 - **Type hints** for better IDE support
 - **Comprehensive tests** and CI/CD

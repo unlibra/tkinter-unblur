@@ -20,7 +20,7 @@ tkinter-unblur makes the same Windows API call, with the same value. This page s
 
 ## What is the same
 
-Both declare the process as **system DPI aware** through [`SetProcessDpiAwareness`](https://learn.microsoft.com/en-us/windows/win32/api/shellscalingapi/nf-shellscalingapi-setprocessdpiawareness) with the value `1` (`PROCESS_SYSTEM_DPI_AWARE`). Windows stops stretching the window in both cases, and both share the [multi-monitor limitation](./why-blurry#limitation-monitors-with-different-scaling) of that mode.
+Both declare the process as **system DPI aware** through [`SetProcessDpiAwareness`](https://learn.microsoft.com/en-us/windows/win32/api/shellscalingapi/nf-shellscalingapi-setprocessdpiawareness) with the value `1` (`PROCESS_SYSTEM_DPI_AWARE`), before the Tk window is created. Windows stops stretching the window in both cases, Tk reads the real DPI and sizes fonts given in points for it, and both share the [multi-monitor limitation](./why-blurry#limitation-monitors-with-different-scaling) of that mode.
 
 An older variant, `ctypes.windll.user32.SetProcessDPIAware()`, also makes the process system DPI aware.
 

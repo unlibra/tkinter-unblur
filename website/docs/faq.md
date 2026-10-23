@@ -12,7 +12,9 @@ Run the built-in demo:
 python -m tkinter_unblur
 ```
 
-It opens a window that shows the detected DPI and scaling factor. On a display scaled above 100%, it reports "DPI awareness is active".
+It opens a window that shows the detected DPI and scaling factor. When `dpi_scaling` is greater than 1.0, it shows "DPI awareness is active". This only checks the detected scaling, not the awareness itself.
+
+To confirm that DPI awareness was set, turn on debug logging (see [below](#dpi-scaling-is-1-0-on-my-high-dpi-display)) and look for the line "SetProcessDpiAwareness(1) succeeded" from the logger `tkinter_unblur._windows`.
 
 You can also print the values from your own app:
 
@@ -23,17 +25,19 @@ root = Tk()
 print(root.dpi_x, root.dpi_y, f"{root.dpi_scaling:.0%}")
 ```
 
-## My window got smaller. Is that a bug?
+## My window got smaller, or text does not fit. Is that a bug?
 
-No. Without tkinter-unblur, Windows stretches the whole window to the expected size, which is why it looked blurry. With it, Windows stops stretching, so pixel sizes are real screen pixels and the window looks smaller at scaling above 100%.
+No. Without tkinter-unblur, Windows stretches the whole window to the expected size, which is why it looked blurry. With it, Windows stops stretching, so pixel sizes are real screen pixels, and Tk does not scale them. The window geometry, padding and canvas sizes look smaller at scaling above 100%.
 
-Use `scale_geometry()` to keep the original size:
+Text with a font size in points keeps its size, because Tk scales point sizes for the real DPI. So the text can become too large for the smaller pixel-sized parts around it.
+
+Use `scale_geometry()` to keep the original window size:
 
 ```python
-root.geometry(root.scale_geometry("800x600"))
+root.geometry(root.scale_geometry("800x600"))  # 1200x900 at 150%
 ```
 
-For other pixel values, such as padding or a canvas size, use `scale_value()`. See [Why Is Tkinter Blurry on Windows?](./why-blurry#why-the-window-can-look-smaller).
+For other pixel values, such as padding or a canvas size, use `scale_value()`. Do not use it on font sizes in points, which Tk already scales. See [Why Is Tkinter Blurry on Windows?](./why-blurry#why-the-window-can-look-smaller).
 
 ## The window is sharp on one monitor and blurry on another
 
@@ -63,11 +67,11 @@ Nothing changes. `Tk` behaves exactly like `tkinter.Tk`, `dpi_x` and `dpi_y` are
 
 ## Something else already set DPI awareness
 
-DPI awareness can be set only once per process, for example by an application manifest or an earlier `SetProcessDpiAwareness` call. In that case Windows keeps the existing setting, and the call from tkinter-unblur has no effect. tkinter-unblur still creates the window and asks Windows for the DPI as usual.
+DPI awareness can be set only once per process, for example by an application manifest or an earlier `SetProcessDpiAwareness` call. In that case Windows keeps the existing setting, and the call from tkinter-unblur has no effect. With debug logging on, it logs "SetProcessDpiAwareness(1) skipped: awareness already set". tkinter-unblur still creates the window and asks Windows for the DPI as usual.
 
 ## Which Windows and Python versions are supported?
 
-Windows 10 and 11, and Python 3.9 to 3.14. The Windows API it uses, `SetProcessDpiAwareness`, needs Windows 8.1 or later.
+Windows 10 and 11, and Python 3.10 to 3.15. The Windows API it uses, `SetProcessDpiAwareness`, needs Windows 8.1 or later.
 
 ## I used `hdpitkinter`
 
