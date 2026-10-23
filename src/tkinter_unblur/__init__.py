@@ -28,7 +28,7 @@ from tkinter_unblur.exceptions import (
     UnsupportedPlatformError,
 )
 
-__version__ = "3.0.0"
+__version__ = "3.1.0"
 __all__ = [
     "DPIDetectionError",
     "HdpiTk",
