@@ -1,8 +1,8 @@
 ---
-description: "tkinter-unblur compared with the common ctypes fix for blurry Tkinter, SetProcessDpiAwareness(1): what each does, and when the one-liner is enough."
+description: "Fix blurry Tkinter with ctypes SetProcessDpiAwareness(1) or with tkinter-unblur? What each one does, and when the ctypes one-liner is enough."
 ---
 
-# Compared to the ctypes One-Liner
+# Fix Blurry Tkinter: ctypes SetProcessDpiAwareness or tkinter-unblur?
 
 The usual answer to "Tkinter is blurry on Windows" is a single `ctypes` call before creating the window:
 

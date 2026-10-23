@@ -1,8 +1,8 @@
 ---
-description: "Answers to common tkinter-unblur questions: smaller windows after the fix, checking that it works, multiple monitors, Toplevel windows, Linux and macOS."
+description: "Window smaller after the fix? Blurry on a second monitor? dpi_scaling stuck at 1.0? Answers to common tkinter-unblur questions and problems."
 ---
 
-# FAQ
+# tkinter-unblur FAQ and Troubleshooting
 
 ## How do I check that it works?
 
