@@ -1,6 +1,11 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 permissions:
   contents: read
 
@@ -96,9 +101,37 @@ jobs:
           name: dist
           path: dist/
 
+  # Builds the VitePress site, as the deploy workflow does on main, so dead
+  # links and config errors fail the pull request instead of the deploy.
+  website:
+    name: Build website
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+
+      # The website is a separate Node project and pins its own pnpm.
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: website/package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: website/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
   status-check:
     runs-on: ubuntu-latest
-    needs: [lint, test, build]
+    needs: [lint, test, build, website]
     if: always()
     steps:
       - name: Check workflow status
