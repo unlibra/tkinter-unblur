@@ -1,6 +1,6 @@
 ---
 title: "tkinter-unblur"
-titleTemplate: "Fix blurry Tkinter apps on Windows high-DPI displays"
+titleTemplate: "Fix Blurry Tkinter on High-DPI Windows"
 description: "tkinter-unblur fixes blurry Tkinter apps on Windows 10/11 high-DPI displays. Change one import and your app renders sharply at 125%, 150% or 200% scaling."
 ---
 
@@ -43,7 +43,7 @@ root.geometry("800x600")
 root.mainloop()
 ```
 
-That's all you need! For advanced usage, see the [API Reference](./api). To learn what changes and why, see [Why Tkinter Looks Blurry on Windows](./why-blurry).
+That's all you need! For advanced usage, see the [API Reference](./api). To learn what changes and why, see [Why Is Tkinter Blurry on Windows?](./why-blurry).
 
 ## Compatibility
 

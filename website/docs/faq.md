@@ -33,7 +33,7 @@ Use `scale_geometry()` to keep the original size:
 root.geometry(root.scale_geometry("800x600"))
 ```
 
-For other pixel values, such as padding or a canvas size, use `scale_value()`. See [Why Tkinter Looks Blurry on Windows](./why-blurry#why-the-window-can-look-smaller).
+For other pixel values, such as padding or a canvas size, use `scale_value()`. See [Why Is Tkinter Blurry on Windows?](./why-blurry#why-the-window-can-look-smaller).
 
 ## The window is sharp on one monitor and blurry on another
 
