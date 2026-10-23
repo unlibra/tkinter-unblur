@@ -87,9 +87,12 @@ Scale a numeric value by the DPI factor.
 from tkinter import Label
 
 root = Tk()
-# Scale font size to maintain physical size across different DPI settings
-label = Label(root, text="Hello", font=("Arial", root.scale_value(12)))
+# Tk does not scale pixel values, such as padding, so scale them yourself
+label = Label(root, text="Hello", font=("Arial", 12))
+label.pack(padx=root.scale_value(10), pady=root.scale_value(10))
 ```
+
+Font sizes in points, such as `("Arial", 12)`, need no scaling: Tk already sizes them for the display's DPI. Scaling them again with `scale_value()` makes the text too large.
 
 ##### `scale_geometry(geometry: str) -> str`
 

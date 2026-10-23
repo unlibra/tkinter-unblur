@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   sized by text render larger on scaled displays (1.25x at 125% scaling). They
   now match the Windows display setting. The API is unchanged, but layouts that
   were tuned to the old, smaller text may need adjusting.
+  If you scaled font sizes with `scale_value()`, remove that call: Tk now
+  scales point sizes itself, so the text would be scaled twice.
 
 ### Fixed
 
