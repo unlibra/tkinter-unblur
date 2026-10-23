@@ -1,0 +1,11 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "tkinter-unblur",
+  "description": "Fix blurry Tkinter apps on Windows high-DPI displays by changing one import.",
+  "folders": ["website/docs"],
+  "rules": [
+    "Replace `from tkinter import Tk` with `from tkinter_unblur import Tk`. Keep the other tkinter imports, such as widgets and ttk.",
+    "Create the root window with tkinter_unblur.Tk before any other Tk window: it sets DPI awareness before the window is created.",
+    "Do not scale font sizes given in points with scale_value(): since 3.0.0, Tk already scales them for the display. Use scale_value() and scale_geometry() for pixel values, such as window geometry, padding and canvas sizes."
+  ]
+}
