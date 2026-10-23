@@ -1,8 +1,38 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { defineConfig } from 'vitepress'
+import llmstxt from 'vitepress-plugin-llms'
 
 // Published under https://docs.unlibra.com/tkinter-unblur/ as the GitHub
 // Pages site of this repository (see .github/workflows/deploy-docs.yml).
 const SITE_URL = 'https://docs.unlibra.com/tkinter-unblur/'
+
+// FAQPage structured data built from the page's own "## Question" sections,
+// so it always matches the text that readers see.
+function faqPage(markdown: string) {
+  const sections = markdown.replace(/^---\n[\s\S]*?\n---\n/, '').split(/^## /m).slice(1)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: sections.map((section) => {
+      const [question, ...answer] = section.split('\n')
+      return {
+        '@type': 'Question',
+        name: toPlainText(question),
+        acceptedAnswer: { '@type': 'Answer', text: toPlainText(answer.join('\n')) }
+      }
+    })
+  }
+}
+
+function toPlainText(markdown: string) {
+  return markdown
+    .replace(/```[^\n]*\n([\s\S]*?)```/g, '$1') // keep the code, drop the fences
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // keep the link text
+    .replace(/[`*]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
 
 export default defineConfig({
   lang: 'en',
@@ -16,6 +46,22 @@ export default defineConfig({
 
   sitemap: {
     hostname: SITE_URL
+  },
+
+  // Generates llms.txt, llms-full.txt and a Markdown copy of each page, for
+  // coding agents and other LLM tools that read the docs.
+  vite: {
+    plugins: [
+      llmstxt({
+        domain: 'https://docs.unlibra.com',
+        // The hint is hidden text on the home page, which search engines may
+        // treat as cloaking. Pages still link to llms.txt in their <head>.
+        injectLLMHint: false,
+        // Unlike a hero-only landing page, the home page holds the
+        // installation and usage instructions.
+        excludeIndexPage: false
+      })
+    ]
   },
 
   transformPageData(pageData, { siteConfig }) {
@@ -46,6 +92,11 @@ export default defineConfig({
           license: 'https://opensource.org/licenses/MIT'
         })
       ])
+    }
+
+    if (pageData.relativePath === 'faq.md') {
+      const markdown = readFileSync(join(siteConfig.srcDir, pageData.relativePath), 'utf-8')
+      head.push(['script', { type: 'application/ld+json' }, JSON.stringify(faqPage(markdown))])
     }
   },
 
