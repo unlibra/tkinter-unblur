@@ -20,6 +20,21 @@ __all__ = ["Tk"]
 logger = logging.getLogger(__name__)
 
 
+def _set_dpi_awareness() -> None:
+    """Make the process DPI aware on Windows.
+
+    Must be called before the Tk window is created. Does nothing on
+    non-Windows platforms.
+    """
+    if sys.platform != "win32":
+        return
+
+    # Import Windows-specific module only on Windows
+    from tkinter_unblur._windows import set_process_dpi_awareness
+
+    set_process_dpi_awareness()
+
+
 def _get_dpi_info(window_handle: int) -> tuple[int | None, int | None, float]:
     """Get DPI information for a window.
 
@@ -124,6 +139,9 @@ class Tk(_TkBase):
 
         All arguments are passed directly to tkinter.Tk.__init__.
         """
+        # SetProcessDpiAwareness must precede any API that depends on DPI
+        # awareness, so call it before tkinter.Tk creates the window.
+        _set_dpi_awareness()
         super().__init__(
             screenName=screenName,
             baseName=baseName,
@@ -135,7 +153,7 @@ class Tk(_TkBase):
         self._apply_dpi_awareness()
 
     def _apply_dpi_awareness(self) -> None:
-        """Apply DPI awareness settings to this window."""
+        """Store the DPI information for this window."""
         self.dpi_x, self.dpi_y, self.dpi_scaling = _get_dpi_info(self.winfo_id())
 
     def scale_value(self, value: float | str) -> int:

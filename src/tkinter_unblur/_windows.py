@@ -6,10 +6,10 @@ This module should only be imported on Windows platforms.
 from __future__ import annotations
 
 import logging
-from ctypes import POINTER, WinDLL, byref, c_uint
+from ctypes import POINTER, WinDLL, byref, c_int, c_long, c_uint
 from ctypes.wintypes import DWORD, HMONITOR, HWND
 
-__all__ = ["get_dpi_info_windows"]
+__all__ = ["get_dpi_info_windows", "set_process_dpi_awareness"]
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,44 @@ logger = logging.getLogger(__name__)
 DPI_100_PERCENT = 96
 DPI_TYPE_EFFECTIVE = 0  # MDT_EFFECTIVE_DPI
 MONITOR_DEFAULTTONEAREST = 2
+PROCESS_SYSTEM_DPI_AWARE = 1
+
+# HRESULT values (signed 32-bit)
+S_OK = 0
+E_ACCESSDENIED = -2147024891  # 0x80070005
+
+
+def set_process_dpi_awareness() -> None:
+    """Make the process system DPI aware.
+
+    Microsoft requires SetProcessDpiAwareness to be called before any API
+    that depends on DPI awareness, so call this before creating a Tk window.
+    """
+    try:
+        shcore = WinDLL("shcore")
+    except OSError:
+        logger.warning("Failed to load shcore.dll for DPI awareness")
+        return
+
+    # Return the HRESULT as a signed value instead of an int of unknown sign
+    shcore.SetProcessDpiAwareness.restype = c_long
+    shcore.SetProcessDpiAwareness.argtypes = [c_int]
+
+    try:
+        result = shcore.SetProcessDpiAwareness(PROCESS_SYSTEM_DPI_AWARE)
+    except OSError as e:
+        logger.warning(f"SetProcessDpiAwareness failed: {e}")
+        return
+
+    if result == S_OK:
+        logger.debug("SetProcessDpiAwareness(1) succeeded")
+    elif result == E_ACCESSDENIED:
+        # Set earlier by another call or by the application manifest
+        logger.debug("SetProcessDpiAwareness(1) skipped: awareness already set")
+    else:
+        logger.warning(
+            f"SetProcessDpiAwareness returned error code: {result & 0xFFFFFFFF:#010x}"
+        )
 
 
 def get_dpi_info_windows(window_handle: int) -> tuple[int, int, float]:
@@ -34,16 +72,6 @@ def get_dpi_info_windows(window_handle: int) -> tuple[int, int, float]:
     except OSError:
         logger.warning("Failed to load Windows DLLs for DPI detection")
         return 96, 96, 1.0
-
-    # Set process DPI awareness
-    try:
-        shcore.SetProcessDpiAwareness(1)
-        logger.debug("SetProcessDpiAwareness(1) succeeded")
-    except OSError:
-        # This can fail on Windows Server or older Windows versions
-        logger.debug(
-            "SetProcessDpiAwareness failed (may be already set or unsupported)"
-        )
 
     # Get monitor handle for the window
     user32.MonitorFromWindow.restype = HMONITOR
