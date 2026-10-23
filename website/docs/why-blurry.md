@@ -4,6 +4,8 @@ description: "Tkinter text blurry on Windows at 125%, 150% or 200% scaling? Lear
 
 # Why Is Tkinter Blurry on Windows?
 
+**In short:** Windows treats Tkinter apps as DPI unaware, so on a display scaled above 100% it stretches their windows, and the stretching blurs them. Declaring the app DPI aware stops the stretching. With tkinter-unblur, that is one import change: `from tkinter_unblur import Tk` instead of `from tkinter import Tk`.
+
 On a Windows laptop or monitor with display scaling set above 100%, a plain Tkinter window often looks soft: text has fuzzy edges and lines look smeared. This page explains where that comes from and what tkinter-unblur does about it.
 
 ## Display scaling and DPI
