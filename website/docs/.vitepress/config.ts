@@ -133,7 +133,7 @@ export default defineConfig({
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     // The shared unlibra icons, served from the root of docs.unlibra.com.
     ['link', { rel: 'icon', href: 'https://docs.unlibra.com/favicon.ico', sizes: '32x32' }],
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: 'https://docs.unlibra.com/brand/symbol.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: 'https://docs.unlibra.com/favicon.svg' }],
     ['link', { rel: 'apple-touch-icon', href: 'https://docs.unlibra.com/apple-touch-icon.png' }],
   ],
 
