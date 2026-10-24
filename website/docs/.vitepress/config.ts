@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { defineConfig } from 'vitepress'
+import { defineConfig, type PageData } from 'vitepress'
 import llmstxt from 'vitepress-plugin-llms'
 
 // Published under https://docs.unlibra.com/tkinter-unblur/ as the GitHub
@@ -22,6 +22,22 @@ function faqPage(markdown: string) {
         acceptedAnswer: { '@type': 'Answer', text: toPlainText(answer.join('\n')) }
       }
     })
+  }
+}
+
+const AUTHOR = { '@type': 'Person', name: 'unlibra', url: 'https://unlibra.com' }
+
+function techArticle(pageData: PageData, url: string, description: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: pageData.title,
+    description,
+    url,
+    inLanguage: 'en',
+    author: AUTHOR,
+    isPartOf: { '@type': 'WebSite', name: 'tkinter-unblur', url: SITE_URL },
+    ...(pageData.lastUpdated ? { dateModified: new Date(pageData.lastUpdated).toISOString() } : {})
   }
 }
 
@@ -89,9 +105,16 @@ export default defineConfig({
           codeRepository: 'https://github.com/unlibra/tkinter-unblur',
           programmingLanguage: 'Python',
           runtimePlatform: 'Windows',
-          license: 'https://opensource.org/licenses/MIT'
+          license: 'https://opensource.org/licenses/MIT',
+          author: AUTHOR,
+          sameAs: ['https://pypi.org/project/tkinter-unblur/']
         })
       ])
+    } else {
+      // Tells search engines and AI answer engines who wrote each page, what
+      // it belongs to and when it last changed (lastUpdated is the date of
+      // the page's last commit).
+      head.push(['script', { type: 'application/ld+json' }, JSON.stringify(techArticle(pageData, url, description))])
     }
 
     if (pageData.relativePath === 'faq.md') {
@@ -103,18 +126,15 @@ export default defineConfig({
   head: [
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'tkinter-unblur' }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
-    // The shared unlibra symbol, served from the root of docs.unlibra.com.
+    // The same OGP image as unlibra.com, for every site on docs.unlibra.com.
+    ['meta', { property: 'og:image', content: 'https://unlibra.com/ogp.png' }],
+    ['meta', { property: 'og:image:width', content: '1200' }],
+    ['meta', { property: 'og:image:height', content: '630' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    // The shared unlibra icons, served from the root of docs.unlibra.com.
+    ['link', { rel: 'icon', href: 'https://docs.unlibra.com/favicon.ico', sizes: '32x32' }],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: 'https://docs.unlibra.com/brand/symbol.svg' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-    [
-      'link',
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..700&family=Noto+Sans+JP:wght@400..700&display=swap'
-      }
-    ]
+    ['link', { rel: 'apple-touch-icon', href: 'https://docs.unlibra.com/apple-touch-icon.png' }],
   ],
 
   themeConfig: {

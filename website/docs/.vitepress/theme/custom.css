@@ -3,11 +3,11 @@
  * and override only fonts and brand colors. The brand colors are not decided
  * yet and still use the VitePress defaults.
  *
- * One web font each (loaded in config.ts), then the reader's own fonts.
+ * One web font each (imported in theme/index.ts), then the reader's own fonts.
  */
 :root {
-  --vp-font-family-base: "Noto Sans JP", sans-serif;
-  --vp-font-family-mono: "Geist Mono", ui-monospace, monospace;
+  --vp-font-family-base: "Noto Sans JP Variable", sans-serif;
+  --vp-font-family-mono: "Geist Mono Variable", ui-monospace, monospace;
 }
 
 /*

@@ -1,5 +1,15 @@
 name: Dependabot auto-merge
 
+# Turns on auto-merge for Dependabot's low-risk updates, so they merge by
+# themselves once the required status check passes (the ruleset on main).
+# An update is low risk when every dependency in the pull request:
+#   - moves to a newer patch or minor version (majors wait for a person),
+#   - is not on 0.x, where a minor version may break (semver), unless it is a
+#     patch update,
+#   - is a release, not a prerelease such as 2.0.0-alpha.21,
+#   - keeps its maintainers (a new maintainer may mean a hijacked package).
+# Anything it cannot read counts as not low risk. Dependabot opens version
+# updates only after the cooldown in .github/dependabot.yml.
 on: pull_request
 
 permissions:
@@ -12,14 +22,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: meta
-        uses: dependabot/fetch-metadata@v3
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
 
-      - if: >-
-          steps.meta.outputs.update-type == 'version-update:semver-patch' ||
-          steps.meta.outputs.update-type == 'version-update:semver-minor'
+      - name: Check that every update is low risk
+        id: risk
+        env:
+          UPDATES: ${{ steps.meta.outputs.updated-dependencies-json }}
         run: |
-          gh pr review --approve "$PR_URL"
-          gh pr merge --auto --squash "$PR_URL"
+          low=$(jq -r '
+            length > 0 and all(.[];
+              (.updateType == "version-update:semver-patch" or .updateType == "version-update:semver-minor")
+              and ((.newVersion // "") | test("^v?[0-9]+\\.[0-9]+\\.[0-9]+$"))
+              and (.updateType == "version-update:semver-patch" or ((.prevVersion // "0.") | test("^v?0\\.") | not))
+              and (.maintainerChanges != true))
+          ' <<< "$UPDATES")
+          echo "low=$low" >> "$GITHUB_OUTPUT"
+
+      - if: steps.risk.outputs.low == 'true'
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
