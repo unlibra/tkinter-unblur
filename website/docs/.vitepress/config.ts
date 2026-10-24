@@ -139,7 +139,8 @@ export default defineConfig({
 
   themeConfig: {
     // A full URL: a site path would get this site's base prepended.
-    logo: 'https://docs.unlibra.com/brand/symbol.svg',
+    // alt: the brand, read before the site title in the link.
+    logo: { src: 'https://docs.unlibra.com/brand/symbol.svg', alt: 'unlibra' },
 
     nav: [{ text: 'PyPI', link: 'https://pypi.org/project/tkinter-unblur/' }],
 
