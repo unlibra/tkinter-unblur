@@ -1,0 +1,36 @@
+# Version updates. Security updates are on in the repository settings and do
+# not wait for the cooldown.
+#
+# - Weekly, with minor and patch updates of each directory in one pull
+#   request; each major update gets its own pull request.
+# - cooldown: a release is proposed only once it is 7 days old, so a broken or
+#   hijacked release is usually pulled before it reaches here.
+# - Low-risk updates merge by themselves (.github/workflows/dependabot-auto-merge.yml).
+# - No pip entry: the package has no runtime dependencies, and the dev tools
+#   are lower bounds in pyproject.toml that CI installs at their latest.
+version: 2
+updates:
+  # The VitePress site
+  - package-ecosystem: npm
+    directory: /website
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: chore(deps)
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: chore(ci)
