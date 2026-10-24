@@ -6,7 +6,7 @@
  * One web font each (imported in theme/index.ts), then the reader's own fonts.
  */
 :root {
-  --vp-font-family-base: "Noto Sans JP Variable", sans-serif;
+  --vp-font-family-base: "Noto Sans Variable", sans-serif;
   --vp-font-family-mono: "Geist Mono Variable", ui-monospace, monospace;
 }
 
