@@ -142,7 +142,10 @@ export default defineConfig({
     // alt: the brand, read before the site title in the link.
     logo: { src: 'https://docs.unlibra.com/brand/symbol.svg', alt: 'unlibra' },
 
-    nav: [{ text: 'PyPI', link: 'https://pypi.org/project/tkinter-unblur/' }],
+    nav: [
+      { text: 'Donate', link: 'https://unlibra.com/donate' },
+      { text: 'PyPI', link: 'https://pypi.org/project/tkinter-unblur/' }
+    ],
 
     socialLinks: [{ icon: 'github', link: 'https://github.com/unlibra/tkinter-unblur' }],
 
